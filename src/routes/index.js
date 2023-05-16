@@ -2,12 +2,12 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import BlankLayout from "../layouts/BlankLayout";
 import MainLayout from "../layouts/MainLayout";
-import AccountPage from "../layouts/AccountPage";
-import HomePage from "../layouts/HomePage";
-import LoginPage from "../layouts/LoginPage";
-import NotFoundPage from "../layouts/NotFoundPage";
-import RegisterPage from "../layouts/RegisterPage";
-import UserProfilePage from "../layouts/UserProfilePage";
+import HomePage from "../pages/HomePage";
+import AccountPage from "../pages/AccountPage";
+import NotFoundPage from "../pages/NotFoundPage";
+import UserProfilePage from "../pages/UserProfilePage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 function Router() {
   return (
@@ -15,8 +15,9 @@ function Router() {
       <Route path="/" element={<MainLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="account" element={<AccountPage />} />
-        <Route path="user/:userId" element={<UserProfilePage />} />
+        <Route path="account" element={<UserProfilePage />} />
       </Route>
+
       <Route element={<BlankLayout />}>
         <Route path="/" element={<LoginPage />} />
         <Route path="account" element={<RegisterPage />} />
