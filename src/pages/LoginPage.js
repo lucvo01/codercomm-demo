@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { Stack } from "@mui/material";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -51,9 +52,28 @@ function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>LoginPage</h1>
-    </div>
+    <Container maxWidth="xs">
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing ={3}>
+          {!!errors.responseError && (
+            <Alert severity="error">{errors.responseError.message}</Alert>
+          )}
+          <Alert severity='info'>Don't have an account?{" "}
+          <Link variant='subtitle2' component={RouterLink} to='/register'>
+          Get Started
+          </Link>
+          </Alert>
+          <FTextField name='email' label='Email address'/>
+          <FTextField name='password' label='Password' type={showPassword ? "text" : "password"} InputProps={{endAdornment: (
+            <InputAdornment position='end'>
+              <IconButton>
+
+              </IconButton>
+            </InputAdornment>
+          )}}/>
+        </Stack>
+      </FormProvider>
+    </Container>
   );
 }
 
