@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FCheckBox, FormProvider, FTextField } from "../components/form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -18,8 +18,6 @@ const defaultValues = {
 };
 
 function LoginPage() {
-  let navigate = useNavigate();
-  let location = useLocation();
   const auth = useAuth();
 
   const methods = useForm({
@@ -33,6 +31,10 @@ function LoginPage() {
     setError,
     formState: { errors, isSubmitting }
   } = methods;
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
     const from = location.state?.from?.pathname || "/";
