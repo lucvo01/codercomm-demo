@@ -3,9 +3,9 @@ import { FCheckBox, FormProvider, FTextField } from "../components/form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { Stack } from "@mui/material";
+import { Stack, Container, Alert, Link, VisibilityIcon, VisibilityOffIcon } from "@mui/material";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -66,8 +66,8 @@ function LoginPage() {
           <FTextField name='email' label='Email address'/>
           <FTextField name='password' label='Password' type={showPassword ? "text" : "password"} InputProps={{endAdornment: (
             <InputAdornment position='end'>
-              <IconButton>
-
+              <IconButton  onClick={() => setShowPassword(!showPassword)} edge='end'>
+                {showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
               </IconButton>
             </InputAdornment>
           )}}/>
