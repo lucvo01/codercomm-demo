@@ -27,6 +27,8 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const newPost = action.payload;
+      if(state.currentPagePosts.length % 2 ===0)
+        state.currentPagePosts.pop();
       state.postsById(newPost._id) = newPost;
       state.posts.unshift(newPost._id);
     },
