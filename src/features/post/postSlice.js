@@ -47,7 +47,8 @@ const slice = createSlice({
     sendPostReactionSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      console.log(action.payload);
+      const {postId, reactions} = action.payload;
+      state.postsById[postId].reactions = reactions
     }
   }
 });
