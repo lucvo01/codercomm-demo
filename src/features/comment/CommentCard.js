@@ -1,6 +1,7 @@
 import { Box, Stack, Typography, Avatar, Paper } from "@mui/material";
 import React from "react";
 import { fDate } from "../../utils/formatTime";
+import CommentReaction from "./CommentReaction";
 
 function CommentCard({comment}) {
   return (<Stack direction='row' spacing={2}>
@@ -23,7 +24,7 @@ function CommentCard({comment}) {
             {comment.content}
         </Typography>
         <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
-            {/* <CommentReaction comment={comment}/> */}
+            <CommentReaction comment={comment}/>
         </Box>
     </Paper>
   </Stack>);
