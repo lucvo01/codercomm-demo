@@ -2,15 +2,19 @@ import { Avatar, IconButton, Stack, TextField } from "@mui/material";
 import React,  {useState} from "react";
 import {SendIcon} from '@mui/icons-material'
 import useAuth from '../../hooks/useAuth'
+import { useDispatch } from "react-redux";
+import {createComment} from './commentSlice'
 
-function CommentForm() {
+function CommentForm({postId}) {
     const [content, setContent] = useState("");
     const {user} = useAuth();
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert(content)
-    }
+        dispatch(createComment({postId, content}));
+        setContent("")
+    };
 
 
   return (
