@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 import { createElement } from "react";
 import { create } from "@mui/material/styles/createTransitions";
+import {POST_PER_PAGE} from '../../app/config';
 
 const initialState = {
   isLoading: false,
