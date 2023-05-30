@@ -50,6 +50,7 @@ export const createComment = ({ postId, content}) => async (dispatch) => {
       postId
     });
     dispatch(slice.actions.createCommentSuccess(response.data));
+    dispatch(getComments({postId}))
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
   }
