@@ -1,6 +1,7 @@
 import { createContext, useReducer, useEffect } from "react";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
+import { common } from "@mui/material/colors";
 
 const initialState = {
   isInitialized: false,
@@ -58,7 +59,6 @@ const setSession = (accessToken) => {
     delete apiService.defaults.headers.common.Authorization;
   }
 };
-
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -69,7 +69,6 @@ function AuthProvider({ children }) {
 
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-
           const response = await apiService.get("/users/me");
           const user = response.data;
 
@@ -79,7 +78,6 @@ function AuthProvider({ children }) {
           });
         } else {
           setSession(null);
-
           dispatch({
             type: INITIALIZE,
             payload: { isAuthenticated: false, user: null }
@@ -87,7 +85,6 @@ function AuthProvider({ children }) {
         }
       } catch (error) {
         setSession(null);
-
         dispatch({
           type: INITIALIZE,
           payload: { isAuthenticated: false, user: null }
@@ -105,7 +102,7 @@ function AuthProvider({ children }) {
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: { user }
+      payload: { isAuthenticated: true, user }
     });
 
     callback();
@@ -119,7 +116,7 @@ function AuthProvider({ children }) {
 
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: { user }
+      payload: { isAuthenticated: true, user }
     });
 
     callback();
@@ -138,4 +135,4 @@ function AuthProvider({ children }) {
   );
 }
 
-export { AuthContext, AuthProvider };
+export default AuthProvider;

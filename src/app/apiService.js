@@ -16,15 +16,15 @@ apiService.interceptors.request.use(
   }
 );
 
-apiService.interceptors.request.use(
+apiService.interceptors.response.use(
   (response) => {
     console.log("Response", response);
     return response.data;
   },
   function (error) {
     console.log("REQUEST ERROR", { error });
-    // const message = error.response?.data?.error?.message || "Unknown Error"
-    return Promise.reject(error);
+    const message = error.response?.data?.errors?.message || "Unknown Error";
+    return Promise.reject({ message });
   }
 );
 
