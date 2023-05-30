@@ -30,7 +30,7 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const { count, posts } = action.payload;
-      state.posts = action.payload.posts;
+      state.posts = state.posts.concat(post);
       state.totalPosts = count;
     }
   }
