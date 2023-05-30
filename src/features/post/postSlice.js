@@ -33,7 +33,10 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const { count, posts } = action.payload;
-      state.posts = state.posts.concat(posts);
+      posts.forEach(post => {
+        state.postById[post._id] =post;
+        if(!state.currentPagePosts.push(post._id));
+      })
       state.totalPosts = count;
     }
   }
