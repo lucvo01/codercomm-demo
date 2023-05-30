@@ -27,7 +27,8 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
       const newPost = action.payload;
-      state.posts.unshift(newPost);
+      state.postsById(newPost._id) = newPost;
+      state.posts.unshift(newPost._id);
     },
     getPostSuccess(state, action) {
       state.isLoading = false;
@@ -35,7 +36,8 @@ const slice = createSlice({
       const { count, posts } = action.payload;
       posts.forEach(post => {
         state.postById[post._id] =post;
-        if(!state.currentPagePosts.push(post._id));
+        if(!state.currentPagePosts.push(post._id))
+        state.currentPagePosts.push(post._id);
       })
       state.totalPosts = count;
     }

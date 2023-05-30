@@ -7,7 +7,8 @@ import { LoadingButton } from "@mui/lab";
 
 function PostList({ userId }) {
   const [page, setPage] = useState(1);
-  const { posts, totalPosts, isLoading } = useSelector((state) => state.post);
+  const { currentPagePosts, postById, totalPosts, isLoading } = useSelector((state) => state.post);
+  const posts = currentPagePosts.map((postId) => postsById[postId]);
   const dispatch = useDispatch();
 
   useEffect(() => {
