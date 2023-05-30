@@ -7,9 +7,7 @@ const initialState = {
   isLoading: false,
   error: null,
   commentsById: {},
-  commentsByPoast: {
-    'post1': ['c1']
-  },
+  commentsByPoast: {},
   currentPageByPost: {},
   totalCommentByPost: {}
 };
