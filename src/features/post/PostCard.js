@@ -27,8 +27,16 @@ function PostCard({ post }) {
       </IconButton>
     }
     </Link>}
-    >
-    </CardHeader>
+    />
+
+    <Stack spacing={2} sx={{p:3}}>
+      <Typography>{post.content}</Typography>
+
+      {post.image && (<Box sx={{borderRadius: 2, overflow: "hidden", height: 300, "& img": { objectFit: 'cover', width: 1, height: 1}, }}>
+        <img src={post.image} alt='post'/>
+      </Box>
+      )}
+    </Stack>
     </Card>);
 }
 
