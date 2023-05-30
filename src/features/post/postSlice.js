@@ -29,7 +29,7 @@ const slice = createSlice({
       const newPost = action.payload;
       if(state.currentPagePosts.length % POST_PER_PAGE === 0)
         state.currentPagePosts.pop();
-      state.postsById(newPost._id) = newPost;
+      state.postsById[newPost._id] = newPost;
       state.posts.unshift(newPost._id);
     },
     getPostSuccess(state, action) {
