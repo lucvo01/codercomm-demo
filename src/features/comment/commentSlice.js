@@ -60,7 +60,7 @@ export const getComments = ({postId, page=1, limit= COMMENTS_PER_POST}) => async
     const response = await apiService.get(`/post/${postId}/comments`, {
       params
     })
-    dispatch(slice.actions.getCommentSuccess(response.data));
+    dispatch(slice.actions.getCommentSuccess({...response.data, postId, page}));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message))
   }
