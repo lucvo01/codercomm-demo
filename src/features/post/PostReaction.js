@@ -1,4 +1,4 @@
-import { ThumbDown, ThumbDownRounded, ThumbUpRounded } from "@mui/icons-material";
+import {ThumbDownRounded, ThumbUpRounded } from "@mui/icons-material";
 import { IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useDispatch } from "react-redux";
