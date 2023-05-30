@@ -7,7 +7,7 @@ const initialState = {
   isLoading: false,
   error: null,
   commentsById: {},
-  commentsByPoast: {},
+  commentsByPost: {},
   currentPageByPost: {},
   totalCommentByPost: {}
 };
@@ -30,7 +30,12 @@ const slice = createSlice({
     getCommentSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      state.comments = state.comments.concat(action.payload)
+      state.comments = state.comments.concat(action.payload);
+      const {postId, comments, count, page} = action.payload;
+      comments.forEach((comment) => (state.commentsById[comment._id] = comment));
+      state.commentsByPost[postId] = comments.maps((comment) => comment._id).reverse();
+      state.totalCommentByPost[postId] = count;
+      state.currentPageByPost[postId] = page;
     }
   }
 });
