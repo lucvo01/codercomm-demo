@@ -6,7 +6,10 @@ import { create } from "@mui/material/styles/createTransitions";
 const initialState = {
   isLoading: false,
   error: null,
-  posts: []
+  postsById: {
+
+  },
+  currentPagePosts: 
 };
 
 const slice = createSlice({
