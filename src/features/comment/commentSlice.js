@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import apiService from "../../app/apiService";
 import { COMMENTS_PER_POST } from "../../app/config";
+import { toast } from "react-toastify";
 // import { createElement } from "react";
 
 const initialState = {
@@ -36,6 +37,12 @@ const slice = createSlice({
       state.commentsByPost[postId] = comments.maps((comment) => comment._id).reverse();
       state.totalCommentByPost[postId] = count;
       state.currentPageByPost[postId] = page;
+    },
+    sendCommentReactionSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { commentId, reactions} = action.payload;
+      state.commentsById[commentId].reactions  = reactions;
     }
   }
 });
@@ -69,5 +76,25 @@ export const getComments = ({postId, page=1, limit= COMMENTS_PER_POST}) => async
     dispatch(slice.actions.getCommentSuccess({...response.data, postId, page}));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message))
+  }
+}
+
+export const sendCommentReaction = ({commentId, emoji}) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.post(`/reactions`, {
+      targetType: 'comment',
+      targetId: commentId,
+      emoji
+    });
+    dispatch(
+      slice.actions.sendCommentReactionSuccess({
+        commentId,
+        reactions: response.data,
+      })
+    )
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    toast.error(error.message);
   }
 }

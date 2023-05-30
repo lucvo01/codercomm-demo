@@ -12,7 +12,7 @@ function PostReaction({post}) {
         dispatch(sendPostReaction({postId: post._id, emoji}));
     };
 
-  return (<Stack>
+  return (<Stack direction='row' alignItems='center'>
     <IconButton onClick={() => handleClick("like")}>
         <ThumbUpRounded sx={{fontSize: 20, color: 'primary.main'}}/>
     </IconButton>
