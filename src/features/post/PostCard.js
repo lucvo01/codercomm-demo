@@ -3,7 +3,11 @@ import {Box, Link, Card, Stack, Avatar, Typography, CardHeader, IconButton} from
 import{Link as RouterLink} from 'react-router-dom'
 
 function PostCard({ post }) {
-  return <Card>{post.content}</Card>;
+  return (<Card>
+    <CardHeader>
+      
+    </CardHeader>
+    </Card>);
 }
 
 export default PostCard;
