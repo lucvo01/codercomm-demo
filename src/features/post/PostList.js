@@ -8,7 +8,7 @@ import { LoadingButton } from "@mui/lab";
 function PostList({ userId }) {
   const [page, setPage] = useState(1);
   const { currentPagePosts, postById, totalPosts, isLoading } = useSelector((state) => state.post);
-  
+
   const posts = currentPagePosts.map((postId) => postsById[postId]);
   const dispatch = useDispatch();
 
@@ -23,7 +23,7 @@ function PostList({ userId }) {
       ))}
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         {totalPosts ? (
-          <LoadingButton variant="outlined" size="small" loading={isLoading} onClick={() => setPage((page) => page + 1)}>
+          <LoadingButton variant="outlined" size="small" loading={isLoading} onClick={() => setPage((page) => page + 1)} disabled={Boolean(totalPosts) && posts.length >= totalPosts}>
             Load more
           </LoadingButton>
         ) : (
