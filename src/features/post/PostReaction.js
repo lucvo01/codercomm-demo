@@ -1,13 +1,17 @@
 import { ThumbDown, ThumbDownRounded, ThumbUpRounded } from "@mui/icons-material";
 import { IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
+import {sendPostReaction} from './postSlice';
 
 function PostReaction({post}) {
 
+    const dispatch = useDispatch();
+
     const handleClick = (emoji) => {
-        console.log(emoji);
-        
-    }
+        dispatch(sendPostReaction({postId: post._id, emoji}));
+    };
+
   return (<Stack>
     <IconButton onClick={() => handleClick("like")}>
         <ThumbUpRounded sx={{fontSize: 20, color: 'primary.main'}}/>

@@ -43,6 +43,11 @@ const slice = createSlice({
         state.currentPagePosts.push(post._id);
       })
       state.totalPosts = count;
+    },
+    sendPostReactionSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      console.log(action.payload);
     }
   }
 });
@@ -77,3 +82,21 @@ export const getPosts =
       dispatch(slice.actions.hasError(error.message));
     }
   };
+
+  export const sendPostReaction = ({postId, emoji}) => async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await apiService.post(`/reactions`, {
+        targetType: 'Post',
+        targetId: postId,
+        emoji
+      });
+
+      dispatch(slice.actions.sendPostReactionSuccess({
+        postId,
+        reactions: response.data
+      }))
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message))
+    }
+  }
