@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Stack,
   Typography,
   Card,
   Container,
   TablePagination,
+  Box,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SearchInput from "../../components/SearchInput";
 import UserTable from "./UserTable";
+import { getUsers } from "./friendSlice";
 
 function AddFriend() {
   const [filterName, setFilterName] = useState("");
