@@ -31,6 +31,35 @@ const slice = createSlice({
       state.totalUsers = count;
       state.totalPages = totalPages;
     },
+    sendFriendRequestSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { targetUserId, ...friendship } = action.payload;
+      state.userById[targetUserId].friendship = friendship;
+    },
+    declineRequestSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { targetUserId, ...friendship } = action.payload;
+      state.userById[targetUserId].friendship = friendship;
+    },
+    acceptRequestSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { targetUserId, ...friendship } = action.payload;
+      state.userById[targetUserId].friendship = friendship;
+    },
+    cancelRequestSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { targetUserId, ...friendship } = action.payload;
+      state.userById[targetUserId].friendship = null;
+    },
+    removeFriendSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { targetUserId, ...friendship } = action.payload;
+    },
   },
 });
 
@@ -50,3 +79,95 @@ export const getUsers =
       toast.error(error.message);
     }
   };
+
+export const sendFriendRequest = (targetUserId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.post(`/friends/requests`, {
+      to: targetUserId,
+    });
+    dispatch(
+      slice.actions.sendFriendRequestSuccess({ ...response.data, targetUserId })
+    );
+    toast.success("Request sent");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    toast.error(error.message);
+  }
+};
+
+export const declineRequest = (targetUserId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.put(`/friends/requests/${targetUserId}`, {
+      status: "declined",
+    });
+    dispatch(
+      slice.actions.declineRequestSuccess({
+        ...response.data,
+        targetUserId,
+      })
+    );
+    // toast.success("Request sent");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    // toast.error(error.message);
+  }
+};
+
+export const acceptRequest = (targetUserId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.put(`/friends/requests/${targetUserId}`, {
+      status: "accepted",
+    });
+    dispatch(
+      slice.actions.acceptRequestSuccess({
+        ...response.data,
+        targetUserId,
+      })
+    );
+    // toast.success("Request sent");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    // toast.error(error.message);
+  } 
+};
+
+export const cancelRequest = (targetUserId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.delete(
+      `/friends/requests/${targetUserId}`
+    );
+    dispatch(
+      slice.actions.cancelRequestSuccess({
+        ...response.data,
+        targetUserId,
+      })
+    );
+    // toast.success("Request sent");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    // toast.error(error.message);
+  }
+};
+
+export const removeFriend = (targetUserId) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.delete(
+      `/friends/requests/${targetUserId}`
+    );
+    dispatch(
+      slice.actions.removeFriendSuccess({
+        ...response.data,
+        targetUserId,
+      })
+    );
+    // toast.success("Request sent");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    // toast.error(error.message);
+  }
+};
