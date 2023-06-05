@@ -9,7 +9,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
 import AccountPage from "../pages/AccountPage";
 import UserProfilePage from "../pages/UserProfilePage";
-import PostEditCard from "../features/post/PostEditCard";
+import PostEditModal from "../features/post/PostEditModal";
 
 function Router() {
   return (
@@ -23,7 +23,7 @@ function Router() {
         }
       >
         <Route index element={<HomePage />} />
-        <Route path="/posts/:postId/edit" element={<PostEditCard />} />
+        <Route path="/posts/:postId/edit" element={<PostEditModal />} />
         <Route path="account" element={<AccountPage />} />
         <Route path="user/:userId" element={<UserProfilePage />} />
       </Route>

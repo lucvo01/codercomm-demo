@@ -127,11 +127,11 @@ export const sendCommentReaction =
   };
 
 export const deleteComment =
-  ({ userId, commentId, authorId }) =>
+  ({ userId, commentId}) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      await apiService.delete(`/posts/${commentId}`);
+      await apiService.delete(`/comments/${commentId}`);
       toast.success("Delete successfully");
       // dispatch(getCurrentUserProfile());
       dispatch(getComments({ userId }));
@@ -142,13 +142,13 @@ export const deleteComment =
   };
 
 export const editComment =
-  ({ userId, commentId, authorId, content, image }) =>
+  ({ userId, commentId, content }) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
       // upload image to cloudinary
       // const imageUrl = await cloudinaryUpload(image);
-      await apiService.put(`/posts/${commentId}`, {
+      await apiService.put(`/comments/${commentId}`, {
         content
       });
       toast.success("Edit successfully");

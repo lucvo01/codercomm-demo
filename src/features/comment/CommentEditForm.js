@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { createPost, editPost } from "./postSlice";
 import { LoadingButton } from "@mui/lab";
 import useAuth from "../../hooks/useAuth";
+import { editComment } from "./commentSlice";
 
 const yupSchema = Yup.object().shape({
   content: Yup.string().required("Content is required")
@@ -18,7 +18,7 @@ const defaultValues = {
   image: null
 };
 
-function PostEditForm({ postId }) {
+function CommentEditForm({ commentId }) {
   const { isLoading } = useSelector((state) => state.post);
 
   const methods = useForm({
@@ -34,27 +34,27 @@ function PostEditForm({ postId }) {
 
   const dispatch = useDispatch();
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
+//   const handleDrop = useCallback(
+//     (acceptedFiles) => {
+//       const file = acceptedFiles[0];
 
-      if (file) {
-        setValue(
-          "image",
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        );
-      }
-    },
-    [setValue]
-  );
+//       if (file) {
+//         setValue(
+//           "image",
+//           Object.assign(file, {
+//             preview: URL.createObjectURL(file)
+//           })
+//         );
+//       }
+//     },
+//     [setValue]
+//   );
 
   const { user } = useAuth();
   const userId = user._id;
   const onSubmit = (data) => {
-    console.log(`${postId}`);
-    dispatch(editPost({ ...data, postId, userId }));
+    console.log(`${commentId}`);
+    dispatch(editComment({ ...data, commentId, userId }));
   };
 
   return (
@@ -75,26 +75,24 @@ function PostEditForm({ postId }) {
             }}
           />
 
-          <FUploadImage
+          {/* <FUploadImage
             name="image"
             accept="image/*"
             maxSize={3145728}
             onDrop={handleDrop}
-          />
+          /> */}
 
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-end"
-            }}
-          >
+            }}>
             <LoadingButton
               type="submit"
               variant="contained"
               size="small"
-              loading={isSubmitting || isLoading}
-            >
+              loading={isSubmitting || isLoading}>
               Post
             </LoadingButton>
           </Box>
@@ -104,4 +102,4 @@ function PostEditForm({ postId }) {
   );
 }
 
-export default PostEditForm;
+export default CommentEditForm;

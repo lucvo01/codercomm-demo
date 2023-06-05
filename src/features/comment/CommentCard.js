@@ -53,10 +53,10 @@ function CommentCard({ comment, commentId }) {
     } else {
       toast.error("You can only edit your own comment");
     }
-    console.log("Edit post");
+    console.log("Edit comment");
   };
 
-  const menuId = "primary-post-menu";
+  const menuId = "primary-comment-menu";
 
   const renderMenu = (
     <Menu
