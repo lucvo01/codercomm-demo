@@ -29,7 +29,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.usernpm st
+        user: action.payload.user
       };
     case REGISTER_SUCCESS:
       return {
