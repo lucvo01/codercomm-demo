@@ -9,8 +9,8 @@ import useAuth from "../../hooks/useAuth";
 import { deletePost } from "./postSlice";
 
 function PostDeleteModal() {
-  const {postId } = useParams();
-    const { user } = useAuth();
+  const { postId } = useParams();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -25,12 +25,12 @@ function PostDeleteModal() {
   };
 
   const handleClick = () => {
-     dispatch(
-        deletePost({
-          userId: user._id,
-          postId
-        })
-      );
+    dispatch(
+      deletePost({
+        userId: user._id,
+        postId
+      })
+    );
     handleClose();
   };
   return (
@@ -40,6 +40,11 @@ function PostDeleteModal() {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
       >
         <Box>
           <Card>

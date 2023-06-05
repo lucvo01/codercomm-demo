@@ -16,14 +16,12 @@ import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { deleteComment } from "./commentSlice";
 
 function CommentCard({ comment, commentId, postId }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const dispatch = useDispatch();
   const isMenuOpen = Boolean(anchorEl);
 
   const handlePostMenuOpen = (event) => {
@@ -37,7 +35,6 @@ function CommentCard({ comment, commentId, postId }) {
   const handleDeleteComment = () => {
     if (user._id === comment.author._id) {
       navigate(`/${postId}/comments/${commentId}/delete`);
-
     } else {
       toast.error("You can only delete your own comment");
     }
