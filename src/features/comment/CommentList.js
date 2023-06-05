@@ -13,14 +13,14 @@ function CommentList({ postId }) {
     commentsById,
     totalComments,
     isLoading,
-    currentPage,
+    currentPage
   } = useSelector(
     (state) => ({
       commentsByPost: state.comment.commentsByPost[postId],
       totalComments: state.comment.totalCommentsByPost[postId],
       currentPage: state.comment.currentPageByPost[postId] || 1,
       commentsById: state.comment.commentsById,
-      isLoading: state.comment.isLoading,
+      isLoading: state.comment.isLoading
     }),
     shallowEqual
   );
@@ -38,7 +38,7 @@ function CommentList({ postId }) {
     renderComments = (
       <Stack spacing={1.5}>
         {comments.map((comment) => (
-          <CommentCard key={comment._id} comment={comment} />
+          <CommentCard key={comment._id} comment={comment} postId={postId} />
         ))}
       </Stack>
     );

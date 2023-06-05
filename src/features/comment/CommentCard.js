@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { deleteComment } from "./commentSlice";
 
-function CommentCard({ comment, commentId }) {
+function CommentCard({ comment, commentId, postId }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,7 +38,7 @@ function CommentCard({ comment, commentId }) {
     if (user._id === comment.author._id) {
       dispatch(
         deleteComment({
-          userId: user._id,
+          postId: postId,
           commentId: comment._id
         })
       );
