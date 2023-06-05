@@ -14,19 +14,19 @@ function CommentDeleteModal() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  
+
   const handleClose = () => {
     navigate(-1);
   };
   const handleClick = () => {
-      //   dispatch(
-      //   deleteComment({
-      //     postId,
-      //     commentId
-      //   })
-      // );
-       handleClose();
-  }
+    dispatch(
+      deleteComment({
+        postId,
+        commentId
+      })
+    );
+    handleClose();
+  };
 
   return (
     <Stack>
