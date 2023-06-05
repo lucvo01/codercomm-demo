@@ -42,12 +42,13 @@ function PostCard({ post, postId }) {
 
   const handleDeletePost = () => {
     if (user._id === post.author._id) {
-      dispatch(
-        deletePost({
-          userId: user._id,
-          postId: post._id
-        })
-      );
+      navigate(`/posts/${postId}/delete`)
+      // dispatch(
+      //   deletePost({
+      //     userId: user._id,
+      //     postId: post._id
+      //   })
+      // );
     } else {
       toast.error("You can only delete your own post");
     }

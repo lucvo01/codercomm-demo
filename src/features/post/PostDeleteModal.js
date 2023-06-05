@@ -4,12 +4,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
-import CommentEditForm from "./CommentEditForm";
 import { useDispatch } from "react-redux";
-import { deleteComment } from "./commentSlice";
+import useAuth from "../../hooks/useAuth";
+import { deletePost } from "./postSlice";
 
-function DeleteModal() {
-  const { commentId, postId } = useParams();
+function PostDeleteModal() {
+  const {postId } = useParams();
+    const { user } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,12 +25,12 @@ function DeleteModal() {
   };
 
   const handleClick = () => {
-    dispatch(
-      deleteComment({
-        postId,
-        commentId
-      })
-    );
+     dispatch(
+        deletePost({
+          userId: user._id,
+          postId
+        })
+      );
     handleClose();
   };
   return (
@@ -44,7 +45,7 @@ function DeleteModal() {
           <Card>
             <CardContent>
               <Typography variant="subtitle" sx={{ color: "text.secondary" }}>
-                Do you want to delete comment?
+                Do you want to delete post?
               </Typography>
               <Box
                 sx={{
@@ -65,4 +66,4 @@ function DeleteModal() {
   );
 }
 
-export default DeleteModal;
+export default PostDeleteModal;

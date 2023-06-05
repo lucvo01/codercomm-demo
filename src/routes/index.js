@@ -12,6 +12,7 @@ import UserProfilePage from "../pages/UserProfilePage";
 import PostEditModal from "../features/post/PostEditModal";
 import CommentEditModal from "../features/comment/CommentEditModal";
 import DeleteModal from "../features/comment/DeleteModal";
+import PostDeleteModal from "../features/post/PostDeleteModal";
 
 function Router() {
   return (
@@ -26,7 +27,11 @@ function Router() {
       >
         <Route index element={<HomePage />} />
         <Route path="/posts/:postId/edit" element={<PostEditModal />} />
-        <Route
+       <Route
+          path="/posts/:postId/delete"
+          element={<PostDeleteModal />}
+        />
+       <Route
           path="/:postId/comments/:commentId/edit"
           element={<CommentEditModal />}
         />

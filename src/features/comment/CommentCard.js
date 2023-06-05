@@ -37,12 +37,7 @@ function CommentCard({ comment, commentId, postId }) {
   const handleDeleteComment = () => {
     if (user._id === comment.author._id) {
       navigate(`/${postId}/comments/${commentId}/delete`);
-      // dispatch(
-      //   deleteComment({
-      //     postId: postId,
-      //     commentId: comment._id
-      //   })
-      // );
+
     } else {
       toast.error("You can only delete your own comment");
     }
