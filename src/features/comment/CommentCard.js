@@ -14,7 +14,6 @@ import CommentReaction from "./CommentReaction";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 function CommentCard({ comment, commentId, postId }) {
