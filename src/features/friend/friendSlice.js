@@ -7,7 +7,7 @@ const initialState = {
   error: null,
   currentPageUsers: [],
   usersById: {},
-  totalPages: 1,
+  totalPages: 1
 };
 
 const slice = createSlice({
@@ -89,8 +89,8 @@ const slice = createSlice({
       state.error = null;
       const { targetUserId } = action.payload;
       state.usersById[targetUserId].friendship = null;
-    },
-  },
+    }
+  }
 });
 
 export default slice.reducer;
@@ -133,7 +133,7 @@ export const getFriendRequests =
       const params = { page, limit };
       if (filterName) params.name = filterName;
       const response = await apiService.get("/friends/requests/incoming", {
-        params,
+        params
       });
       dispatch(slice.actions.getFriendRequestsSuccess(response.data));
     } catch (error) {
@@ -146,7 +146,7 @@ export const sendFriendRequest = (targetUserId) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.post(`/friends/requests`, {
-      to: targetUserId,
+      to: targetUserId
     });
     dispatch(
       slice.actions.sendFriendRequestSuccess({ ...response.data, targetUserId })
@@ -162,7 +162,7 @@ export const declineRequest = (targetUserId) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.put(`/friends/requests/${targetUserId}`, {
-      status: "declined",
+      status: "declined"
     });
     dispatch(
       slice.actions.declineRequestSuccess({ ...response.data, targetUserId })
@@ -178,7 +178,7 @@ export const acceptRequest = (targetUserId) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.put(`/friends/requests/${targetUserId}`, {
-      status: "accepted",
+      status: "accepted"
     });
     dispatch(
       slice.actions.acceptRequestSuccess({ ...response.data, targetUserId })
@@ -219,3 +219,20 @@ export const removeFriend = (targetUserId) => async (dispatch) => {
     toast.error(error.message);
   }
 };
+
+export const getFriendRequestsSent =
+  ({ filterName, page = 1, limit = 12 }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const params = { page, limit };
+      if (filterName) params.name = filterName;
+      const response = await apiService.get("/friends/requests/outgoing", {
+        params
+      });
+      dispatch(slice.actions.getFriendRequestsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };

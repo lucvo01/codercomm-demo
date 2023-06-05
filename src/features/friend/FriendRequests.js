@@ -6,10 +6,10 @@ import {
   Box,
   Pagination,
   Grid,
-  Container,
+  Container
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendRequests } from "./friendSlice";
+import { getFriendRequests, getFriendRequestsSent } from "./friendSlice";
 import UserCard from "./UserCard";
 import SearchInput from "../../components/SearchInput";
 
@@ -29,6 +29,7 @@ function FriendRequests() {
 
   useEffect(() => {
     dispatch(getFriendRequests({ filterName, page }));
+    dispatch(getFriendRequestsSent({ filterName, page }));
   }, [filterName, page, dispatch]);
 
   return (
