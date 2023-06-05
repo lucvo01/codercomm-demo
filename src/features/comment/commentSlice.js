@@ -9,7 +9,7 @@ const initialState = {
   commentsByPost: {},
   totalCommentsByPost: {},
   currentPageByPost: {},
-  commentsById: {},
+  commentsById: {}
 };
 
 const slice = createSlice({
@@ -51,7 +51,13 @@ const slice = createSlice({
       const { commentId, reactions } = action.payload;
       state.commentsById[commentId].reactions = reactions;
     },
-  },
+    editCommentSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { commentId } = action.payload;
+      state.postsById[commentId] = action.payload;
+    }
+  }
 });
 
 export default slice.reducer;
@@ -63,16 +69,16 @@ export const getComments =
     try {
       const params = {
         page: page,
-        limit: limit,
+        limit: limit
       };
       const response = await apiService.get(`/posts/${postId}/comments`, {
-        params,
+        params
       });
       dispatch(
         slice.actions.getCommentsSuccess({
           ...response.data,
           postId,
-          page,
+          page
         })
       );
     } catch (error) {
@@ -88,7 +94,7 @@ export const createComment =
     try {
       const response = await apiService.post("/comments", {
         content,
-        postId,
+        postId
       });
       dispatch(slice.actions.createCommentSuccess(response.data));
       dispatch(getComments({ postId }));
@@ -106,14 +112,48 @@ export const sendCommentReaction =
       const response = await apiService.post(`/reactions`, {
         targetType: "Comment",
         targetId: commentId,
-        emoji,
+        emoji
       });
       dispatch(
         slice.actions.sendCommentReactionSuccess({
           commentId,
-          reactions: response.data,
+          reactions: response.data
         })
       );
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const deleteComment =
+  ({ userId, commentId, authorId }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      await apiService.delete(`/posts/${commentId}`);
+      toast.success("Delete successfully");
+      // dispatch(getCurrentUserProfile());
+      dispatch(getComments({ userId }));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const editComment =
+  ({ userId, commentId, authorId, content, image }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      // upload image to cloudinary
+      // const imageUrl = await cloudinaryUpload(image);
+      await apiService.put(`/posts/${commentId}`, {
+        content
+      });
+      toast.success("Edit successfully");
+      // dispatch(getCurrentUserProfile());
+      dispatch(getComments({ userId }));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
       toast.error(error.message);

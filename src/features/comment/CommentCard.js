@@ -1,9 +1,93 @@
 import React from "react";
-import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography
+} from "@mui/material";
 import { fDate } from "../../utils/formatTime";
 import CommentReaction from "./CommentReaction";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { deleteComment } from "./commentSlice";
 
-function CommentCard({ comment }) {
+function CommentCard({ comment, commentId }) {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const dispatch = useDispatch();
+  const isMenuOpen = Boolean(anchorEl);
+
+  const handlePostMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteComment = () => {
+    if (user._id === comment.author._id) {
+      dispatch(
+        deleteComment({
+          userId: user._id,
+          commentId: comment._id
+        })
+      );
+    } else {
+      toast.error("You can only delete your own comment");
+    }
+  };
+
+  const handleEditComment = () => {
+    if (user._id === comment.author._id) {
+      navigate(`posts/${commentId}/edit`);
+    } else {
+      toast.error("You can only edit your own comment");
+    }
+    console.log("Edit post");
+  };
+
+  const menuId = "primary-post-menu";
+
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right"
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right"
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleDeleteComment} sx={{ mx: 1 }}>
+        Delete
+      </MenuItem>
+
+      <MenuItem
+        onClick={handleEditComment}
+        // to={`posts/${commentId}/edit`}
+        // component={RouterLink}
+        sx={{ mx: 1 }}
+      >
+        Edit
+      </MenuItem>
+    </Menu>
+  );
   return (
     <Stack direction="row" spacing={2}>
       <Avatar alt={comment.author?.name} src={comment.author?.avatarUrl} />
@@ -20,6 +104,10 @@ function CommentCard({ comment }) {
           <Typography variant="caption" sx={{ color: "text.disabled" }}>
             {fDate(comment.createdAt)}
           </Typography>
+          <IconButton>
+            <MoreVertIcon sx={{ fontSize: 30 }} onClick={handlePostMenuOpen} />
+            {renderMenu}
+          </IconButton>
         </Stack>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {comment.content}

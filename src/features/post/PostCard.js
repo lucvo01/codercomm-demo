@@ -49,7 +49,7 @@ function PostCard({ post, postId }) {
         })
       );
     } else {
-      toast.error("You can only delete your own posts");
+      toast.error("You can only delete your own post");
     }
   };
 
@@ -57,7 +57,7 @@ function PostCard({ post, postId }) {
     if (user._id === post.author._id) {
       navigate(`posts/${postId}/edit`);
     } else {
-      toast.error("You can only edit your own posts");
+      toast.error("You can only edit your own post");
     }
     console.log("Edit post");
   };
