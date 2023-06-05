@@ -1,19 +1,18 @@
-import React from "react";
+import { CssBaseline } from "@mui/material";
 import {
   alpha,
   createTheme,
-  ThemeProvider as MUIThemeProvider
-} from "@mui/material";
-import { CssBaseline } from "@mui/material";
+  ThemeProvider as MUIThemeProvider,
+} from "@mui/material/styles";
 import customizeComponents from "./customizations";
 
 const PRIMARY = {
-  lighter: "#f9e9e9",
-  light: "#423e3e",
-  main: "#000",
-  dark: "#383030",
-  darker: "#000",
-  contrastText: "#FFF"
+  lighter: "#C8FACD",
+  light: "#5BE584",
+  main: "#00AB55",
+  dark: "#007B55",
+  darker: "#005249",
+  contrastText: "#FFF",
 };
 const SECONDARY = {
   lighter: "#D6E4FF",
@@ -21,7 +20,7 @@ const SECONDARY = {
   main: "#3366FF",
   dark: "#1939B7",
   darker: "#091A7A",
-  contrastText: "#FFF"
+  contrastText: "#FFF",
 };
 const SUCCESS = {
   lighter: "#E9FCD4",
@@ -29,7 +28,7 @@ const SUCCESS = {
   main: "#54D62C",
   dark: "#229A16",
   darker: "#08660D",
-  contrastText: "#FFF"
+  contrastText: "#FFF",
 };
 
 const GREY = {
@@ -50,7 +49,7 @@ const GREY = {
   500_32: alpha("#919EAB", 0.32),
   500_48: alpha("#919EAB", 0.48),
   500_56: alpha("#919EAB", 0.56),
-  500_80: alpha("#919EAB", 0.8)
+  500_80: alpha("#919EAB", 0.8),
 };
 
 function ThemeProvider({ children }) {
@@ -69,14 +68,13 @@ function ThemeProvider({ children }) {
         disabledBackground: GREY[500_24],
         focus: GREY[500_24],
         hoverOpacity: 0.08,
-        diableOpacity: 0.48
-      }
+        disabledOpacity: 0.48,
+      },
     },
-    shape: { borderRadius: 8 }
+    shape: { borderRadius: 8 },
   };
 
   const theme = createTheme(themeOptions);
-
   theme.components = customizeComponents(theme);
 
   return (

@@ -1,27 +1,24 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import Switch from "@mui/material/Switch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
+import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import Logo from "../components/Logo";
 
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import Logo from "../components/Logo";
+import { Avatar, Divider } from "@mui/material";
 import useAuth from "../hooks/useAuth";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 function MainHeader() {
   const { user, logout } = useAuth();
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,20 +39,21 @@ function MainHeader() {
     }
   };
 
+  const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
-      id="menu-appbar"
       anchorEl={anchorEl}
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "right"
+        horizontal: "right",
       }}
+      id={menuId}
       keepMounted
       transformOrigin={{
         vertical: "top",
-        horizontal: "right"
+        horizontal: "right",
       }}
-      open={Boolean(anchorEl)}
+      open={isMenuOpen}
       onClose={handleMenuClose}
     >
       <Box sx={{ my: 1.5, px: 2.5 }}>
@@ -67,7 +65,7 @@ function MainHeader() {
         </Typography>
       </Box>
 
-      <Divider sx={{ boderStyle: "dashed" }} />
+      <Divider sx={{ borderStyle: "dashed" }} />
 
       <MenuItem
         onClick={handleMenuClose}
@@ -80,48 +78,55 @@ function MainHeader() {
 
       <MenuItem
         onClick={handleMenuClose}
-        to="/"
+        to="/account"
         component={RouterLink}
         sx={{ mx: 1 }}
       >
-        Account Setting
+        Account Settings
       </MenuItem>
 
-      <Divider sx={{ boderStyle: "dashed" }} />
+      <Divider sx={{ borderStyle: "dashed" }} />
 
-      <MenuItem onClick={handleLogout} sx={{ mx: 1 }}>
+      <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
         Logout
       </MenuItem>
     </Menu>
   );
 
   return (
-    <Box sx={{ mb: 1 }}>
+    <Box sx={{ mb: 3 }}>
       <AppBar position="static" color="transparent">
         <Toolbar>
           <IconButton
             size="large"
             edge="start"
             color="inherit"
-            aria-label="menu"
+            aria-label="open drawer"
             sx={{ mr: 2 }}
           >
             <Logo />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ display: { xs: "none", sm: "block" } }}
+          >
             CoderComm
           </Typography>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box>
             <Avatar
-              src={user?.avatarUrl}
-              alt={user?.name}
               onClick={handleProfileMenuOpen}
+              src={user.avatarUrl}
+              alt={user.name}
+              sx={{ width: 32, height: 32 }}
             />
           </Box>
-          {renderMenu}
         </Toolbar>
       </AppBar>
+      {renderMenu}
     </Box>
   );
 }

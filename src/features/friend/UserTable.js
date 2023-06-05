@@ -10,8 +10,9 @@ import {
   TableContainer,
   Box,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import FriendSlice from "./friendSlice";
+
 import FriendStatus from "./FriendStatus";
 import ActionButton from "./ActionButton";
 
@@ -19,17 +20,17 @@ function UserTable({ users }) {
   const { user } = useAuth();
   const currentUserId = user._id;
 
-  const getActionAndStatus = (targetUser) => {
+  const getActionsAndStatus = (targetUser) => {
     const props = {
-        currentUserId: currentUserId,
-        targetUserId: targetUser._id,
-        friendship: targetUser.friendship,
+      currentUserId: currentUserId,
+      targetUserId: targetUser._id,
+      friendship: targetUser.friendship,
     };
     return {
-        status: <FriendStatus {...props}/>,
-        action: <ActionButton {...props}/>
-    }
-  }
+      status: <FriendStatus {...props} />,
+      action: <ActionButton {...props} />,
+    };
+  };
 
   return (
     <Box sx={{ overflowX: "auto" }}>
@@ -46,84 +47,61 @@ function UserTable({ users }) {
               <TableCell sx={{ display: { xs: "none", md: "table-cell" } }}>
                 Job Title
               </TableCell>
-              <TableCell sx={{ display: { xs: "none", sm: "table-cell" }, width: '20%' }}>
+              <TableCell
+                sx={{ display: { xs: "none", sm: "table-cell" }, width: "20%" }}
+              >
                 Status
               </TableCell>
-              <TableCell sx={{ width: { xs: "20%", sm: "25%" } }}>
-                Action
-              </TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {user.map((user) => {
-                  const {status, action} = getActionAndStatus(user);
-                return (
-                  <TableRow key={user._id} hover>
-                    <TableCell
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
-                      }}>
-                      <Avatar
-                        alt={user.name}
-                        src={user.avatarUrl}
-                        sx={{ mr: 2 }}
-                      />
-                      <Link
-                        variant="subtitle2"
-                        sx={{ fontWeight: 600 }}
-                        component={RouterLink}
-                        to={`/user/${user._id}`}>
-                        {user.name}
-                      </Link>
-                    </TableCell>
-
-                    <TableCell
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
-                      }}>
-                      <Avatar
-                        alt={user.name}
-                        src={user.avatarUrl}
-                        sx={{ mr: 2 }}
-                      />
-                      <Link
-                        variant="subtitle2"
-                        sx={{ fontWeight: 600 }}
-                        component={RouterLink}
-                        to={`/user/${user._id}`}>
-                        {user.name}
-                      </Link>
-                    </TableCell>
-
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { xs: "none", md: "table-cell" },
-                      }}>
+            {users.map((user) => {
+              const { status, action } = getActionsAndStatus(user);
+              return (
+                <TableRow key={user._id} hover>
+                  <TableCell
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Avatar
+                      alt={user.name}
+                      src={user.avatarUrl}
+                      sx={{ mr: 2 }}
+                    />
+                    <Link
+                      variant="subtitle2"
+                      sx={{ fontWeight: 600 }}
+                      component={RouterLink}
+                      to={`/user/${user._id}`}
+                    >
                       {user.name}
-                    </TableCell>
-
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { xs: "none", md: "table-cell" },
-                      }}>
-                      {user.jobTitle}
-                    </TableCell>
-
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { xs: "none", md: "table-cell" },
-                      }}>
-                      {status}
-                    </TableCell>
-                  </TableRow>
-                );
+                    </Link>
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{ display: { xs: "none", md: "table-cell" } }}
+                  >
+                    {user.email}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{ display: { xs: "none", md: "table-cell" } }}
+                  >
+                    {user.jobTitle}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{ display: { xs: "none", sm: "table-cell" } }}
+                  >
+                    {status}
+                  </TableCell>
+                  <TableCell align="left">{action}</TableCell>
+                </TableRow>
+              );
             })}
           </TableBody>
         </Table>

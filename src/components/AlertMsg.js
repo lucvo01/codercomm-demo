@@ -1,13 +1,16 @@
 import React from "react";
-import {ToastContainer} from 'react-toastify';
-  import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
-function AlertMsg() {
+const AlertMsg = () => {
   return (
-  <div>
-    
-  </div>
+    <ToastContainer
+      position="top-right"
+      hideProgressBar={false}
+      newestOnTop={false}
+      pauseOnHover
+    />
   );
-}
+};
 
 export default AlertMsg;

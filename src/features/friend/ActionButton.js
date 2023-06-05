@@ -1,6 +1,13 @@
-import React from "react";
-import { sendFriendRequest } from "./friendSlice";
 import { Button, Stack } from "@mui/material";
+import React from "react";
+import { useDispatch } from "react-redux";
+import {
+  acceptRequest,
+  cancelRequest,
+  declineRequest,
+  removeFriend,
+  sendFriendRequest,
+} from "./friendSlice";
 
 function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
   const dispatch = useDispatch();
@@ -12,7 +19,8 @@ function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
       sx={{ fontSize: "0.6rem", ...sx }}
       size="small"
       variant="contained"
-      onClick={() => dispatch(sendFriendRequest(targetUserId))}>
+      onClick={() => dispatch(sendFriendRequest(targetUserId))}
+    >
       Send Request
     </Button>
   );
@@ -25,49 +33,49 @@ function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
       size="small"
       variant="contained"
       color="error"
-      onClick={() => dispatch(sendFriendRequest(targetUserId))}>
+      onClick={() => dispatch(removeFriend(targetUserId))}
+    >
       Unfriend
     </Button>
   );
-
   const btnResend = (
     <Button
       sx={{ fontSize: "0.6rem", ...sx }}
       size="small"
       variant="contained"
-      color="error"
-      onClick={() => dispatch(sendFriendRequest(targetUserId))}>
+      onClick={() => dispatch(sendFriendRequest(targetUserId))}
+    >
       {friendship.from === currentUserId ? "Resend" : "Send"} Request
     </Button>
   );
-
   const btnCancelRequest = (
     <Button
       sx={{ fontSize: "0.6rem", ...sx }}
       size="small"
       variant="contained"
       color="error"
-      onClick={() => dispatch(CancelRequest(targetUserId))}>
+      onClick={() => dispatch(cancelRequest(targetUserId))}
+    >
       Cancel Request
     </Button>
   );
-
   const btnGroupReact = (
-    <Stack>
+    <Stack direction="row" spacing={1}>
       <Button
         sx={{ fontSize: "0.6rem", ...sx }}
         size="small"
         variant="contained"
-        color="error"
-        onClick={() => dispatch(acceptRequest(targetUserId))}>
+        color="success"
+        onClick={() => dispatch(acceptRequest(targetUserId))}
+      >
         Accept
       </Button>
       <Button
-        sx={{ fontSize: "0.6rem", ...sx }}
         size="small"
-        variant="contained"
+        variant="outlined"
         color="error"
-        onClick={() => dispatch(declineRequest(targetUserId))}>
+        onClick={() => dispatch(declineRequest(targetUserId))}
+      >
         Decline
       </Button>
     </Stack>
@@ -86,7 +94,7 @@ function ActionButton({ currentUserId, targetUserId, friendship, sx }) {
     if (from === currentUserId && to === targetUserId) {
       return btnCancelRequest;
     } else if (from === targetUserId && to === currentUserId) {
-      return btnGroupReact
+      return btnGroupReact;
     }
   }
 

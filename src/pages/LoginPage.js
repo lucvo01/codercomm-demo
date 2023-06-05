@@ -1,51 +1,51 @@
 import React, { useState } from "react";
-import { FCheckBox, FormProvider, FTextField } from "../components/form";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
 import {
-  Stack,
-  Container,
-  Alert,
   Link,
+  Stack,
+  Alert,
   IconButton,
-  InputAdornment
+  InputAdornment,
+  Container,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
+import { useNavigate, useLocation, Link as RouterLink } from "react-router-dom";
+
+import { FCheckbox, FormProvider, FTextField } from "../components/form";
+import useAuth from "../hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().required("Password is required")
+  password: Yup.string().required("Password is required"),
 });
 
 const defaultValues = {
   email: "",
   password: "",
-  remember: true
+  remember: true,
 };
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const auth = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
-    defaultValues
+    defaultValues,
   });
-
   const {
     handleSubmit,
     reset,
     setError,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = methods;
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
     const from = location.state?.from?.pathname || "/";
@@ -53,11 +53,9 @@ function LoginPage() {
 
     try {
       await auth.login({ email, password }, () => {
-        console.log(from);
         navigate(from, { replace: true });
       });
     } catch (error) {
-      console.log(error);
       reset();
       setError("responseError", error);
     }
@@ -71,9 +69,9 @@ function LoginPage() {
             <Alert severity="error">{errors.responseError.message}</Alert>
           )}
           <Alert severity="info">
-            Don't have an account?{" "}
+            Don’t have an account?{" "}
             <Link variant="subtitle2" component={RouterLink} to="/register">
-              Get Started
+              Get started
             </Link>
           </Alert>
 
@@ -93,7 +91,7 @@ function LoginPage() {
                     {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
         </Stack>
@@ -104,7 +102,7 @@ function LoginPage() {
           justifyContent="space-between"
           sx={{ my: 2 }}
         >
-          {/* <FCheckBox name="remember" label="Remember me" /> */}
+          <FCheckbox name="remember" label="Remember me" />
           <Link component={RouterLink} variant="subtitle2" to="/">
             Forgot password?
           </Link>
@@ -116,7 +114,6 @@ function LoginPage() {
           type="submit"
           variant="contained"
           loading={isSubmitting}
-          onClick={() => console.log(location.state?.from?.pathname)}
         >
           Login
         </LoadingButton>

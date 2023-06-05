@@ -35,5 +35,5 @@ function FMultiCheckbox({ name, options, ...other }) {
     />
   );
 }
- 
+
 export default FMultiCheckbox;

@@ -5,19 +5,19 @@ export function fDate(date) {
 }
 
 export function fDateTime(date) {
-  return format(new Date(date), "dd MMMM yyyy HH:mm");
+  return format(new Date(date), "dd MMM yyyy HH:mm");
 }
 
 export function fTimestamp(date) {
-  return format(new Date(date));
+  return getTime(new Date(date));
 }
 
 export function fDateTimeSuffix(date) {
-  return format(new Date(date), "dd MMMM yyyy hh:mm p");
+  return format(new Date(date), "dd/MM/yyyy hh:mm p");
 }
 
 export function fToNow(date) {
-  return format(new Date(date), {
-    addSuffix: true
+  return formatDistanceToNow(new Date(date), {
+    addSuffix: true,
   });
 }

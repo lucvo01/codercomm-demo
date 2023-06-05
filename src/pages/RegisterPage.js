@@ -1,21 +1,23 @@
 import React, { useState } from "react";
+import {
+  Link,
+  Stack,
+  Alert,
+  IconButton,
+  InputAdornment,
+  Container,
+} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+
+import useAuth from "../hooks/useAuth";
 import { FormProvider, FTextField } from "../components/form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import useAuth from "../hooks/useAuth";
-import { useLocation, useNavigate, Link as RouterLink } from "react-router-dom";
-import {
-  Stack,
-  Container,
-  Alert,
-  Link,
-  IconButton,
-  InputAdornment
-} from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { LoadingButton } from "@mui/lab";
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -23,34 +25,32 @@ const RegisterSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
   passwordConfirmation: Yup.string()
     .required("Please confirm your password")
-    .oneOf([Yup.ref("password")], "Password must match")
+    .oneOf([Yup.ref("password")], "Passwords must match"),
 });
 
 const defaultValues = {
   name: "",
   email: "",
   password: "",
-  passwordConfirmation: ""
+  passwordConfirmation: "",
 };
 
 function RegisterPage() {
-  const auth = useAuth();
   const navigate = useNavigate();
-
+  const auth = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
 
   const methods = useForm({
     resolver: yupResolver(RegisterSchema),
-    defaultValues
+    defaultValues,
   });
-
   const {
     handleSubmit,
     reset,
     setError,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = methods;
 
   const onSubmit = async (data) => {
@@ -75,13 +75,12 @@ function RegisterPage() {
           <Alert severity="info">
             Already have an account?{" "}
             <Link variant="subtitle2" component={RouterLink} to="/login">
-              Login
+              Sign in
             </Link>
           </Alert>
 
           <FTextField name="name" label="Full name" />
           <FTextField name="email" label="Email address" />
-
           <FTextField
             name="password"
             label="Password"
@@ -96,10 +95,9 @@ function RegisterPage() {
                     {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
-
           <FTextField
             name="passwordConfirmation"
             label="Password Confirmation"
@@ -120,7 +118,7 @@ function RegisterPage() {
                     )}
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
 
@@ -130,7 +128,6 @@ function RegisterPage() {
             type="submit"
             variant="contained"
             loading={isSubmitting}
-            onClick={() => console.log("hello")}
           >
             Register
           </LoadingButton>

@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import apiService from "../../app/apiService";
-import { createElement } from "react";
 
 const initialState = {
   isLoading: false,
   error: null,
   currentPageUsers: [],
-  userById: {},
+  usersById: {},
   totalPages: 1,
 };
 
@@ -17,48 +17,78 @@ const slice = createSlice({
     startLoading(state) {
       state.isLoading = true;
     },
+
     hasError(state, action) {
       state.isLoading = false;
       state.error = action.payload;
     },
+
     getUsersSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
 
       const { users, count, totalPages } = action.payload;
-      users.forEach((user) => (state.userById[users._id] = user));
+      users.forEach((user) => (state.usersById[user._id] = user));
       state.currentPageUsers = users.map((user) => user._id);
       state.totalUsers = count;
       state.totalPages = totalPages;
     },
+
+    getFriendsSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      const { users, count, totalPages } = action.payload;
+      users.forEach((user) => (state.usersById[user._id] = user));
+      state.currentPageUsers = users.map((user) => user._id);
+      state.totalUsers = count;
+      state.totalPages = totalPages;
+    },
+
+    getFriendRequestsSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      const { users, count, totalPages } = action.payload;
+      users.forEach((user) => (state.usersById[user._id] = user));
+      state.currentPageUsers = users.map((user) => user._id);
+      state.totalUsers = count;
+      state.totalPages = totalPages;
+    },
+
     sendFriendRequestSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
       const { targetUserId, ...friendship } = action.payload;
-      state.userById[targetUserId].friendship = friendship;
+      state.usersById[targetUserId].friendship = friendship;
     },
+
     declineRequestSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
       const { targetUserId, ...friendship } = action.payload;
-      state.userById[targetUserId].friendship = friendship;
+      state.usersById[targetUserId].friendship = friendship;
     },
+
     acceptRequestSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
       const { targetUserId, ...friendship } = action.payload;
-      state.userById[targetUserId].friendship = friendship;
+      state.usersById[targetUserId].friendship = friendship;
     },
+
     cancelRequestSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      const { targetUserId, ...friendship } = action.payload;
-      state.userById[targetUserId].friendship = null;
+      const { targetUserId } = action.payload;
+      state.usersById[targetUserId].friendship = null;
     },
+
     removeFriendSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
-      const { targetUserId, ...friendship } = action.payload;
+      const { targetUserId } = action.payload;
+      state.usersById[targetUserId].friendship = null;
     },
   },
 });
@@ -76,6 +106,38 @@ export const getUsers =
       dispatch(slice.actions.getUsersSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+      toast.error(error.message);
+    }
+  };
+
+export const getFriends =
+  ({ filterName, page = 1, limit = 12 }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const params = { page, limit };
+      if (filterName) params.name = filterName;
+      const response = await apiService.get("/friends", { params });
+      dispatch(slice.actions.getFriendsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const getFriendRequests =
+  ({ filterName, page = 1, limit = 12 }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const params = { page, limit };
+      if (filterName) params.name = filterName;
+      const response = await apiService.get("/friends/requests/incoming", {
+        params,
+      });
+      dispatch(slice.actions.getFriendRequestsSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
       toast.error(error.message);
     }
   };
@@ -103,15 +165,12 @@ export const declineRequest = (targetUserId) => async (dispatch) => {
       status: "declined",
     });
     dispatch(
-      slice.actions.declineRequestSuccess({
-        ...response.data,
-        targetUserId,
-      })
+      slice.actions.declineRequestSuccess({ ...response.data, targetUserId })
     );
-    // toast.success("Request sent");
+    toast.success("Request declined");
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
-    // toast.error(error.message);
+    toast.error(error.message);
   }
 };
 
@@ -122,16 +181,13 @@ export const acceptRequest = (targetUserId) => async (dispatch) => {
       status: "accepted",
     });
     dispatch(
-      slice.actions.acceptRequestSuccess({
-        ...response.data,
-        targetUserId,
-      })
+      slice.actions.acceptRequestSuccess({ ...response.data, targetUserId })
     );
-    // toast.success("Request sent");
+    toast.success("Request accepted");
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
-    // toast.error(error.message);
-  } 
+    toast.error(error.message);
+  }
 };
 
 export const cancelRequest = (targetUserId) => async (dispatch) => {
@@ -141,33 +197,25 @@ export const cancelRequest = (targetUserId) => async (dispatch) => {
       `/friends/requests/${targetUserId}`
     );
     dispatch(
-      slice.actions.cancelRequestSuccess({
-        ...response.data,
-        targetUserId,
-      })
+      slice.actions.cancelRequestSuccess({ ...response.data, targetUserId })
     );
-    // toast.success("Request sent");
+    toast.success("Request cancelled");
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
-    // toast.error(error.message);
+    toast.error(error.message);
   }
 };
 
 export const removeFriend = (targetUserId) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await apiService.delete(
-      `/friends/requests/${targetUserId}`
-    );
+    const response = await apiService.delete(`/friends/${targetUserId}`);
     dispatch(
-      slice.actions.removeFriendSuccess({
-        ...response.data,
-        targetUserId,
-      })
+      slice.actions.removeFriendSuccess({ ...response.data, targetUserId })
     );
-    // toast.success("Request sent");
+    toast.success("Friend removed");
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
-    // toast.error(error.message);
+    toast.error(error.message);
   }
 };

@@ -3,14 +3,14 @@ import {
   Stack,
   Typography,
   Card,
-  Container,
-  TablePagination,
   Box,
+  TablePagination,
+  Container,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import SearchInput from "../../components/SearchInput";
-import UserTable from "./UserTable";
 import { getUsers } from "./friendSlice";
+import UserTable from "./UserTable";
+import SearchInput from "../../components/SearchInput";
 
 function AddFriend() {
   const [filterName, setFilterName] = useState("");
@@ -20,22 +20,21 @@ function AddFriend() {
   const { currentPageUsers, usersById, totalUsers } = useSelector(
     (state) => state.friend
   );
-
   const users = currentPageUsers.map((userId) => usersById[userId]);
   const dispatch = useDispatch();
 
-  const handleSubmit = (searchQuery) => {
-    setFilterName(searchQuery)
-  };
-
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
+    setPage(newPage);
   };
 
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(parseInt(event.target.value, 10))
-      setPage(0);
-    };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSubmit = (searchQuery) => {
+    setFilterName(searchQuery);
+  };
 
   useEffect(() => {
     dispatch(getUsers({ filterName, page: page + 1, limit: rowsPerPage }));
@@ -44,7 +43,7 @@ function AddFriend() {
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        AddFriend
+        Add Friends
       </Typography>
       <Card sx={{ p: 3 }}>
         <Stack spacing={2}>
@@ -53,18 +52,24 @@ function AddFriend() {
 
             <Typography
               variant="subtitle"
-              sx={{ color: "text.secondary", ml: 1 }}>
+              sx={{ color: "text.secondary", ml: 1 }}
+            >
               {totalUsers > 1
                 ? `${totalUsers} users found`
                 : totalUsers === 1
                 ? `${totalUsers} user found`
-                : "No users found"}
+                : "No user found"}
             </Typography>
 
             <Box sx={{ flexGrow: 1 }} />
 
             <TablePagination
-              sx={{}}
+              sx={{
+                "& .MuiTablePagination-selectLabel, .MuiTablePagination-select, .MuiTablePagination-selectIcon":
+                  {
+                    display: { xs: "none", md: "block" },
+                  },
+              }}
               component="div"
               count={totalUsers ? totalUsers : 0}
               page={page}
@@ -74,9 +79,8 @@ function AddFriend() {
               onRowsPerPageChange={handleChangeRowsPerPage}
             />
           </Stack>
+          <UserTable users={users} />
         </Stack>
-
-        <UserTable users={users}/>
       </Card>
     </Container>
   );

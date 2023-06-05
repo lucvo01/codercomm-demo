@@ -1,32 +1,34 @@
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
-import Profile from "../features/user/Profile";
-import FriendList from "../features/friend/FriendList";
-import FriendRequests from "../features/friend/FriendRequests";
-import AddFriend from "../features/friend/AddFriend";
-import { Container, Tabs, Tab, Box, Card } from "@mui/material";
-import { capitalCase } from "change-case";
-import ProfileCover from "../features/user/ProfileCover";
-import { styled } from "@mui/material/styles";
 
-const TabWrapperStyle = styled("div")(({ theme }) => ({
+import { Box, Card, Container, Tab, Tabs } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+
+import Profile from "../features/user/Profile";
+import ProfileCover from "../features/user/ProfileCover";
+import { capitalCase } from "change-case";
+import AddFriend from "../features/friend/AddFriend";
+import FriendRequests from "../features/friend/FriendRequests";
+import FriendList from "../features/friend/FriendList";
+
+const TabsWrapperStyle = styled("div")(({ theme }) => ({
   zIndex: 9,
   bottom: 0,
   width: "100%",
   display: "flex",
   position: "absolute",
-  backgroundColor: "#ffff",
+  backgroundColor: "#fff",
   [theme.breakpoints.up("sm")]: {
-    justifyContent: "center"
+    justifyContent: "center",
   },
   [theme.breakpoints.up("md")]: {
     justifyContent: "flex-end",
-    paddingRight: theme.spacing(3)
-  }
+    paddingRight: theme.spacing(3),
+  },
 }));
 
 function HomePage() {
@@ -41,38 +43,43 @@ function HomePage() {
     {
       value: "profile",
       icon: <AccountBoxIcon sx={{ fontSize: 24 }} />,
-      component: <Profile profile={user} />
+      component: <Profile profile={user} />,
     },
     {
       value: "friends",
       icon: <PeopleAltIcon sx={{ fontSize: 24 }} />,
-      component: <FriendList profile={user} />
+      component: <FriendList />,
     },
     {
       value: "requests",
       icon: <ContactMailIcon sx={{ fontSize: 24 }} />,
-      component: <FriendRequests profile={user} />
+      component: <FriendRequests />,
     },
     {
       value: "add_friend",
-      icon: <PersonAddAltRoundedIcon sx={{ fontSize: 24 }} />,
-      component: <AddFriend profile={user} />
-    }
+      icon: <PersonAddRoundedIcon sx={{ fontSize: 24 }} />,
+      component: <AddFriend />,
+    },
   ];
 
   return (
     <Container>
-      <Card sx={{ mb: 3, height: 280, position: "relative" }}>
+      <Card
+        sx={{
+          mb: 3,
+          height: 280,
+          position: "relative",
+        }}
+      >
         <ProfileCover profile={user} />
 
-        <TabWrapperStyle>
+        <TabsWrapperStyle>
           <Tabs
             value={currentTab}
             scrollButtons="auto"
             variant="scrollable"
             allowScrollButtonsMobile
             onChange={(e, value) => handleChangeTab(value)}
-            aria-label="basic tabs example"
           >
             {PROFILE_TABS.map((tab) => (
               <Tab
@@ -84,7 +91,7 @@ function HomePage() {
               />
             ))}
           </Tabs>
-        </TabWrapperStyle>
+        </TabsWrapperStyle>
       </Card>
 
       {PROFILE_TABS.map((tab) => {

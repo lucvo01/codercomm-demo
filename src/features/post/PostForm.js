@@ -1,13 +1,13 @@
-import React from "react";
-import { FormProvider, FTextField } from "../../components/form";
+import React, { useCallback } from "react";
+import { Box, Card, alpha, Stack } from "@mui/material";
+
+import { FormProvider, FTextField, FUploadImage } from "../../components/form";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { alpha, Box, Card, Stack } from "@mui/material";
-import { alignProperty } from "@mui/material/styles/cssUtils";
+import { createPost, editPost } from "./postSlice";
 import { LoadingButton } from "@mui/lab";
-import { useDispatch, useSelector } from "react-redux";
-import { createPost } from "./postSlice";
 
 const yupSchema = Yup.object().shape({
   content: Yup.string().required("Content is required")
@@ -15,15 +15,16 @@ const yupSchema = Yup.object().shape({
 
 const defaultValues = {
   content: "",
-  image: ""
+  image: null
 };
 
-function PostForm() {
+function PostForm({ postId = null }) {
+  const { isLoading } = useSelector((state) => state.post);
+
   const methods = useForm({
     resolver: yupResolver(yupSchema),
     defaultValues
   });
-
   const {
     handleSubmit,
     reset,
@@ -31,12 +32,30 @@ function PostForm() {
     formState: { isSubmitting }
   } = methods;
 
-  const { isLoading } = useSelector((state) => state.post);
-
   const dispatch = useDispatch();
 
+  const handleDrop = useCallback(
+    (acceptedFiles) => {
+      const file = acceptedFiles[0];
+
+      if (file) {
+        setValue(
+          "image",
+          Object.assign(file, {
+            preview: URL.createObjectURL(file)
+          })
+        );
+      }
+    },
+    [setValue]
+  );
+
   const onSubmit = (data) => {
-    dispatch(createPost(data)).then(() => reset());
+    if (postId) {
+      dispatch(editPost(data));
+    } else {
+      dispatch(createPost(data)).then(() => reset());
+    }
   };
 
   return (
@@ -45,10 +64,10 @@ function PostForm() {
         <Stack spacing={2}>
           <FTextField
             name="content"
-            fullWidth
             multiline
+            fullWidth
             rows={4}
-            placeholder="Share what you are thiking..."
+            placeholder="Share what you are thinking here..."
             sx={{
               "& fieldset": {
                 borderWidth: `1px !important`,
@@ -56,7 +75,13 @@ function PostForm() {
               }
             }}
           />
-          <FTextField name="name" placeholder="image" />
+
+          <FUploadImage
+            name="image"
+            accept="image/*"
+            maxSize={3145728}
+            onDrop={handleDrop}
+          />
 
           <Box
             sx={{

@@ -1,4 +1,5 @@
 import { createContext, useReducer, useEffect } from "react";
+import { useSelector } from "react-redux";
 import apiService from "../app/apiService";
 import { isValidToken } from "../utils/jwt";
 
@@ -8,10 +9,10 @@ const initialState = {
   user: null
 };
 
-const INITIALIZE = "AUTH.INITILIZE";
+const INITIALIZE = "AUTH.INITIALIZE";
 const LOGIN_SUCCESS = "AUTH.LOGIN_SUCCESS";
 const REGISTER_SUCCESS = "AUTH.REGISTER_SUCCESS";
-const LOGOUT = "AUTH.INILOGOUTTILIZE";
+const LOGOUT = "AUTH.LOGOUT";
 const UPDATE_PROFILE = "AUTH.UPDATE_PROFILE";
 
 const reducer = (state, action) => {
@@ -42,12 +43,47 @@ const reducer = (state, action) => {
         isAuthenticated: false,
         user: null
       };
+    case UPDATE_PROFILE:
+      const {
+        name,
+        avatarUrl,
+        coverUrl,
+        aboutMe,
+        city,
+        country,
+        company,
+        jobTitle,
+        facebookLink,
+        instagramLink,
+        linkedinLink,
+        twitterLink,
+        friendCount,
+        postCount
+      } = action.payload;
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          name,
+          avatarUrl,
+          coverUrl,
+          aboutMe,
+          city,
+          country,
+          company,
+          jobTitle,
+          facebookLink,
+          instagramLink,
+          linkedinLink,
+          twitterLink,
+          friendCount,
+          postCount
+        }
+      };
     default:
       return state;
   }
 };
-
-const AuthContext = createContext({ ...initialState });
 
 const setSession = (accessToken) => {
   if (accessToken) {
@@ -59,8 +95,11 @@ const setSession = (accessToken) => {
   }
 };
 
+const AuthContext = createContext({ ...initialState });
+
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const updatedProfile = useSelector((state) => state.user.updatedProfile);
 
   useEffect(() => {
     const initialize = async () => {
@@ -85,24 +124,33 @@ function AuthProvider({ children }) {
             payload: { isAuthenticated: false, user: null }
           });
         }
-      } catch (error) {
-        setSession(null);
+      } catch (err) {
+        console.error(err);
 
+        setSession(null);
         dispatch({
           type: INITIALIZE,
-          payload: { isAuthenticated: false, user: null }
+          payload: {
+            isAuthenticated: false,
+            user: null
+          }
         });
       }
     };
+
     initialize();
   }, []);
+
+  useEffect(() => {
+    if (updatedProfile)
+      dispatch({ type: UPDATE_PROFILE, payload: updatedProfile });
+  }, [updatedProfile]);
 
   const login = async ({ email, password }, callback) => {
     const response = await apiService.post("/auth/login", { email, password });
     const { user, accessToken } = response.data;
 
     setSession(accessToken);
-
     dispatch({
       type: LOGIN_SUCCESS,
       payload: { user }
@@ -112,11 +160,14 @@ function AuthProvider({ children }) {
   };
 
   const register = async ({ name, email, password }, callback) => {
-    const response = await apiService.post("/users", { name, email, password });
+    const response = await apiService.post("/users", {
+      name,
+      email,
+      password
+    });
+
     const { user, accessToken } = response.data;
-
     setSession(accessToken);
-
     dispatch({
       type: REGISTER_SUCCESS,
       payload: { user }
@@ -125,14 +176,21 @@ function AuthProvider({ children }) {
     callback();
   };
 
-  const logout = (callback) => {
+  const logout = async (callback) => {
     setSession(null);
     dispatch({ type: LOGOUT });
     callback();
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        ...state,
+        login,
+        register,
+        logout
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
