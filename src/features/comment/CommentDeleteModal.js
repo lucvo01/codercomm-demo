@@ -6,19 +6,28 @@ import Box from "@mui/material/Box";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+import { useDispatch } from "react-redux";
+import { deleteComment } from "./commentSlice";
 
 function CommentDeleteModal() {
   const { commentId, postId } = useParams();
   const navigate = useNavigate();
-  //   const location = useLocation();
 
-  //   let from = location.state?.backgroundLocation
-  //     ? location.state.backgroundLocation
-  //     : "/";
-
+  const dispatch = useDispatch();
+  
   const handleClose = () => {
     navigate(-1);
   };
+  const handleClick = () => {
+      //   dispatch(
+      //   deleteComment({
+      //     postId,
+      //     commentId
+      //   })
+      // );
+       handleClose();
+  }
+
   return (
     <Stack>
       <Modal
@@ -42,6 +51,7 @@ function CommentDeleteModal() {
             variant="contained"
             size="small"
             // loading={isSubmitting || isLoading}
+            onClick={handleClick}
           >
             Confirm Delete
           </LoadingButton>

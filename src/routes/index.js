@@ -11,7 +11,7 @@ import AccountPage from "../pages/AccountPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import PostEditModal from "../features/post/PostEditModal";
 import CommentEditModal from "../features/comment/CommentEditModal";
-import CommentDeleteModal from "../features/comment/CommentDeleteModal";
+import DeleteModal from "../features/comment/DeleteModal";
 
 function Router() {
   return (
@@ -32,7 +32,7 @@ function Router() {
         />
         <Route
           path="/:postId/comments/:commentId/delete"
-          element={<CommentDeleteModal />}
+          element={<DeleteModal />}
         />
         <Route path="account" element={<AccountPage />} />
         <Route path="user/:userId" element={<UserProfilePage />} />
