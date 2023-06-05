@@ -10,6 +10,7 @@ import AuthRequire from "./AuthRequire";
 import AccountPage from "../pages/AccountPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import PostEditModal from "../features/post/PostEditModal";
+import CommentEditModal from "../features/comment/CommentEditModal";
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
       >
         <Route index element={<HomePage />} />
         <Route path="/posts/:postId/edit" element={<PostEditModal />} />
+        <Route path="/comments/:commentId/edit" element={<v />} />
         <Route path="account" element={<AccountPage />} />
         <Route path="user/:userId" element={<UserProfilePage />} />
       </Route>

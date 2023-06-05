@@ -48,8 +48,9 @@ function CommentCard({ comment, commentId, postId }) {
   };
 
   const handleEditComment = () => {
+    console.log(commentId)
     if (user._id === comment.author._id) {
-      navigate(`posts/${commentId}/edit`);
+      navigate(`comments/${commentId}/edit`);
     } else {
       toast.error("You can only edit your own comment");
     }
