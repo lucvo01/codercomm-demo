@@ -141,7 +141,7 @@ export const deleteComment =
   };
 
 export const editComment =
-  ({ userId, commentId, content, postId }) =>
+  ({ commentId, content, postId }) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {

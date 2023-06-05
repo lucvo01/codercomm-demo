@@ -36,21 +36,22 @@ function CommentCard({ comment, commentId, postId }) {
 
   const handleDeleteComment = () => {
     if (user._id === comment.author._id) {
-      dispatch(
-        deleteComment({
-          postId: postId,
-          commentId: comment._id
-        })
-      );
+      navigate(`/${postId}/comments/${commentId}/delete`);
+      // dispatch(
+      //   deleteComment({
+      //     postId: postId,
+      //     commentId: comment._id
+      //   })
+      // );
     } else {
       toast.error("You can only delete your own comment");
     }
   };
 
   const handleEditComment = () => {
-    console.log(commentId)
+    console.log(commentId);
     if (user._id === comment.author._id) {
-      navigate(`comments/${commentId}/edit`);
+      navigate(`/${postId}/comments/${commentId}/edit`);
     } else {
       toast.error("You can only edit your own comment");
     }
@@ -106,7 +107,7 @@ function CommentCard({ comment, commentId, postId }) {
             {fDate(comment.createdAt)}
           </Typography>
           <IconButton>
-            <MoreVertIcon sx={{ fontSize: 30 }} onClick={handlePostMenuOpen} />
+            <MoreVertIcon sx={{ fontSize: 20 }} onClick={handlePostMenuOpen} />
             {renderMenu}
           </IconButton>
         </Stack>

@@ -18,7 +18,7 @@ const defaultValues = {
   image: null
 };
 
-function CommentEditForm({ commentId }) {
+function CommentEditForm({ commentId, postId }) {
   const { isLoading } = useSelector((state) => state.post);
 
   const methods = useForm({
@@ -34,27 +34,28 @@ function CommentEditForm({ commentId }) {
 
   const dispatch = useDispatch();
 
-//   const handleDrop = useCallback(
-//     (acceptedFiles) => {
-//       const file = acceptedFiles[0];
+  // const handleDrop = useCallback(
+  //   (acceptedFiles) => {
+  //     const file = acceptedFiles[0];
 
-//       if (file) {
-//         setValue(
-//           "image",
-//           Object.assign(file, {
-//             preview: URL.createObjectURL(file)
-//           })
-//         );
-//       }
-//     },
-//     [setValue]
-//   );
+  //     if (file) {
+  //       setValue(
+  //         "image",
+  //         Object.assign(file, {
+  //           preview: URL.createObjectURL(file)
+  //         })
+  //       );
+  //     }
+  //   },
+  //   [setValue]
+  // );
 
   const { user } = useAuth();
   const userId = user._id;
   const onSubmit = (data) => {
     console.log(`${commentId}`);
-    dispatch(editComment({ ...data, commentId, userId }));
+    console.log(`${postId}`);
+    dispatch(editComment({ ...data, commentId, postId }));
   };
 
   return (
