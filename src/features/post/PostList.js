@@ -4,7 +4,6 @@ import { Box, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import PostCard from "./PostCard";
 import { getPosts } from "./postSlice";
-import PostEditForm from "./PostEditForm";
 
 function PostList({ userId }) {
   const [page, setPage] = useState(1);

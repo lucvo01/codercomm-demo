@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { createPost, editPost } from "./postSlice";
+import { editPost } from "./postSlice";
 import { LoadingButton } from "@mui/lab";
 import useAuth from "../../hooks/useAuth";
 
@@ -27,7 +27,6 @@ function PostEditForm({ postId }) {
   });
   const {
     handleSubmit,
-    reset,
     setValue,
     formState: { isSubmitting }
   } = methods;

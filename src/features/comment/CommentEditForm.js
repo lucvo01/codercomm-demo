@@ -1,12 +1,11 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Box, Card, alpha, Stack } from "@mui/material";
-import { FormProvider, FTextField, FUploadImage } from "../../components/form";
+import { FormProvider, FTextField } from "../../components/form";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { LoadingButton } from "@mui/lab";
-import useAuth from "../../hooks/useAuth";
 import { editComment } from "./commentSlice";
 
 const yupSchema = Yup.object().shape({
@@ -27,8 +26,6 @@ function CommentEditForm({ commentId, postId }) {
   });
   const {
     handleSubmit,
-    reset,
-    setValue,
     formState: { isSubmitting }
   } = methods;
 
@@ -50,8 +47,7 @@ function CommentEditForm({ commentId, postId }) {
   //   [setValue]
   // );
 
-  const { user } = useAuth();
-  const userId = user._id;
+
   const onSubmit = (data) => {
     console.log(`${commentId}`);
     console.log(`${postId}`);

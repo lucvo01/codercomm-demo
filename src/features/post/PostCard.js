@@ -11,7 +11,7 @@ import {
   Menu,
   MenuItem
 } from "@mui/material";
-import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate} from "react-router-dom";
 import { fDate } from "../../utils/formatTime";
 
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -19,8 +19,6 @@ import PostReaction from "./PostReaction";
 import CommentForm from "../comment/CommentForm";
 import CommentList from "../comment/CommentList";
 import useAuth from "../../hooks/useAuth";
-import { useDispatch } from "react-redux";
-import { deletePost, editPost } from "./postSlice";
 import { toast } from "react-toastify";
 
 function PostCard({ post, postId }) {
@@ -29,7 +27,6 @@ function PostCard({ post, postId }) {
   const { user } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const dispatch = useDispatch();
   const isMenuOpen = Boolean(anchorEl);
 
   const handlePostMenuOpen = (event) => {
@@ -43,12 +40,6 @@ function PostCard({ post, postId }) {
   const handleDeletePost = () => {
     if (user._id === post.author._id) {
       navigate(`/posts/${postId}/delete`)
-      // dispatch(
-      //   deletePost({
-      //     userId: user._id,
-      //     postId: post._id
-      //   })
-      // );
     } else {
       toast.error("You can only delete your own post");
     }
